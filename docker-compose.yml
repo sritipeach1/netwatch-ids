@@ -1,0 +1,19 @@
+# Demo mode: simulated sensor + API + dashboard.   docker compose up --build   ->  http://localhost:3000
+name: netwatch-demo
+services:
+  api:
+    build: ./api
+    environment:
+      NETWATCH_MODE: demo
+      NETWATCH_CORS: http://localhost:3000
+    ports: ["8000:8000"]
+    volumes: ["netwatch-data:/data"]
+  web:
+    build:
+      context: ./web
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:8000
+    ports: ["3000:3000"]
+    depends_on: [api]
+volumes:
+  netwatch-data:

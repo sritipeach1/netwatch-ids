@@ -1,0 +1,52 @@
+%YAML 1.1
+---
+# Minimal Suricata 7 configuration for the NetWatch lab.
+vars:
+  address-groups:
+    HOME_NET: "[10.0.1.0/24]"
+    EXTERNAL_NET: "!$HOME_NET"
+  port-groups:
+    HTTP_PORTS: "80"
+    SHELLCODE_PORTS: "!80"
+
+default-log-dir: /var/log/suricata/
+default-rule-path: /etc/suricata/rules
+rule-files:
+  - local.rules
+classification-file: /etc/suricata/classification.config
+reference-config-file: /etc/suricata/reference.config
+
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert:
+            metadata: yes
+        - flow
+
+af-packet:
+  - interface: eth0
+    cluster-id: 99
+    cluster-type: cluster_flow
+    defrag: yes
+
+app-layer:
+  protocols:
+    http:
+      enabled: yes
+    dns:
+      enabled: yes
+    ssh:
+      enabled: yes
+
+flow-timeouts:
+  default:
+    new: 10
+    established: 30
+    closed: 0
+  tcp:
+    new: 10
+    established: 30
+    closed: 5

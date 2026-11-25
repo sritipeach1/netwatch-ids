@@ -1,0 +1,63 @@
+# Full lab: real Suricata watching a victim container, with an attacker container and automatic nftables blocking.
+#   docker compose -f lab/docker-compose.lab.yml up --build
+#   docker compose -f lab/docker-compose.lab.yml exec attacker attack scan
+# Closed lab network only. The victim has deliberately weak credentials: never publish its ports.
+name: netwatch-lab
+
+networks:
+  lab:
+    ipam:
+      config:
+        - subnet: 10.0.1.0/24
+
+volumes:
+  eve: {}
+  data: {}
+
+services:
+  victim:
+    build: ./victim
+    networks:
+      lab:
+        ipv4_address: 10.0.1.10
+    ports: ["8000:8000"]   # the API shares this container's network namespace
+
+  sensor:
+    image: jasonish/suricata:7.0
+    network_mode: "service:victim"
+    cap_add: [NET_ADMIN, NET_RAW, SYS_NICE]
+    command: ["-c", "/etc/suricata/suricata.yaml", "-i", "eth0"]
+    volumes:
+      - ../suricata/suricata.yaml:/etc/suricata/suricata.yaml:ro
+      - ../suricata/rules:/etc/suricata/rules:ro
+      - eve:/var/log/suricata
+
+  api:
+    build: ../api
+    network_mode: "service:victim"
+    cap_add: [NET_ADMIN]
+    environment:
+      NETWATCH_MODE: live
+      NETWATCH_RESPONSE: enforce
+      NETWATCH_EVE_PATH: /var/log/suricata/eve.json
+      NETWATCH_ALLOWLIST: "127.0.0.0/8,10.0.1.1/32,10.0.1.10/32"
+      NETWATCH_API_KEY: ${NETWATCH_API_KEY:-change-me}
+      NETWATCH_CORS: http://localhost:3000
+    volumes:
+      - eve:/var/log/suricata:ro
+      - data:/data
+    depends_on: [sensor]
+
+  attacker:
+    build: ./attacker
+    networks:
+      lab:
+        ipv4_address: 10.0.1.100
+
+  web:
+    build:
+      context: ../web
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:8000
+    ports: ["3000:3000"]
+    networks: [lab]

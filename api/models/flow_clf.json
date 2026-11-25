@@ -1,0 +1,76 @@
+{
+  "trained_at": 1795626486,
+  "episodes": 2500,
+  "windows": 8705,
+  "features": [
+    "log_flows",
+    "log_flows_per_s",
+    "log_unique_ports",
+    "unique_port_ratio",
+    "no_reply_ratio",
+    "log_mean_bytes_out",
+    "log_mean_bytes_in",
+    "log_mean_pkts_out",
+    "log_mean_duration",
+    "top_port_share",
+    "ssh_share"
+  ],
+  "classes": [
+    "benign",
+    "bruteforce",
+    "flood",
+    "scan"
+  ],
+  "data": "simulated flows",
+  "holdout": {
+    "benign": {
+      "precision": 1.0,
+      "recall": 0.955,
+      "f1-score": 0.977,
+      "support": 739.0
+    },
+    "bruteforce": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 226.0
+    },
+    "flood": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 211.0
+    },
+    "scan": {
+      "precision": 0.969,
+      "recall": 1.0,
+      "f1-score": 0.984,
+      "support": 1034.0
+    },
+    "macro avg": {
+      "precision": 0.992,
+      "recall": 0.989,
+      "f1-score": 0.99,
+      "support": 2210.0
+    },
+    "weighted avg": {
+      "precision": 0.986,
+      "recall": 0.985,
+      "f1-score": 0.985,
+      "support": 2210.0
+    }
+  },
+  "feature_importance": {
+    "top_port_share": 0.153,
+    "log_mean_bytes_in": 0.143,
+    "unique_port_ratio": 0.142,
+    "log_mean_bytes_out": 0.117,
+    "no_reply_ratio": 0.112,
+    "log_unique_ports": 0.101,
+    "log_mean_duration": 0.096,
+    "log_flows_per_s": 0.074,
+    "log_mean_pkts_out": 0.049,
+    "log_flows": 0.014,
+    "ssh_share": 0.001
+  }
+}

@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+/*
+  Light "lichen" pages with one dark console for live instruments.
+  Orange is reserved for responses (blocks) and the primary action.
+*/
+:root {
+  --paper: #d6dacb;
+  --surface: #e5e8dc;
+  --surface-2: #dce0d1;
+  --ink: #1c211b;
+  --ink-2: #4a5246;
+  --ink-3: #5f6759;
+  --rule: #c8cdbc;
+  --rule-strong: #a9b09e;
+
+  --signal: #f07a2a;
+  --signal-strong: #c4500f;
+  --signal-text: #b3420c;
+  --amber: #d99a1e;
+  --ok: #2e8a57;
+  --rules: #3e6e73;
+
+  --console: #151915;
+  --console-2: #1e231e;
+  --console-line: #2e352e;
+  --console-ink: #e9ece2;
+  --console-dim: #a6ae9f;
+  --console-rules: #8cc0c2;
+
+  --fresh: #f5d8c2;
+  --focus: #c4500f;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-signal: var(--signal);
+  --color-signal-strong: var(--signal-strong);
+  --color-signal-text: var(--signal-text);
+  --color-console: var(--console);
+  --color-console-2: var(--console-2);
+  --color-console-line: var(--console-line);
+  --color-console-ink: var(--console-ink);
+  --color-console-dim: var(--console-dim);
+  --font-sans: "Onest Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+html { color-scheme: light; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+.console :focus-visible { outline-color: var(--signal); }
+
+/* Large light numerals, the main typographic voice. */
+.figure { font-weight: 300; letter-spacing: -0.035em; line-height: 0.95; }
+.addr { font-family: var(--font-mono); font-size: 0.92em; letter-spacing: -0.01em; }
+
+/* Console background: a faint survey grid. */
+.console {
+  background-color: var(--console);
+  background-image:
+    radial-gradient(120% 80% at 50% 110%, rgba(240, 122, 42, 0.10), transparent 60%),
+    linear-gradient(var(--console-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--console-line) 1px, transparent 1px);
+  background-size: 100% 100%, 32px 32px, 32px 32px;
+  background-position: 0 0, -1px -1px, -1px -1px;
+  color: var(--console-ink);
+}
+
+@keyframes fresh-row { from { background-color: var(--fresh); } to { background-color: transparent; } }
+.fresh-row { animation: fresh-row 2.4s ease-out; }
+
+@keyframes slide-in { from { transform: translateX(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+.slide-in { animation: slide-in 180ms ease-out; }
+
+/* A node on the radial pings once when its attack type fires. */
+@keyframes ping-ring { from { r: var(--r0); opacity: 0.9; } to { r: calc(var(--r0) * 3.2); opacity: 0; } }
+.ping { animation: ping-ring 1.4s ease-out 1 forwards; }
+
+@keyframes feed-in { from { transform: translateY(-6px); opacity: 0; } to { transform: none; opacity: 1; } }
+.feed-in { animation: feed-in 220ms ease-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fresh-row, .slide-in, .feed-in { animation: none; }
+  .ping { animation: none; opacity: 0; }
+  * { scroll-behavior: auto !important; }
+}

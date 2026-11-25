@@ -1,0 +1,17 @@
+# NetWatch custom rules. sid 1000001-1000005 map to attack types and ATT&CK techniques in api/app/attack_map.py.
+# Validate with:  suricata -T -c /etc/suricata/suricata.yaml -S /etc/suricata/rules/local.rules
+
+# T1046 Network service discovery: 20 SYNs from one source within 5 seconds
+alert tcp any any -> $HOME_NET any (msg:"NETWATCH Port scan (SYN threshold)"; flags:S,12; threshold:type both, track by_src, count 20, seconds 5; classtype:attempted-recon; priority:2; sid:1000001; rev:1; metadata:mitre_technique_id T1046;)
+
+# T1110 Brute force: 5 new SSH connections from one source within 60 seconds
+alert tcp any any -> $HOME_NET 22 (msg:"NETWATCH SSH brute force attempt"; flow:to_server; flags:S,12; threshold:type both, track by_src, count 5, seconds 60; classtype:attempted-user; priority:1; sid:1000002; rev:1; metadata:mitre_technique_id T1110;)
+
+# T1190 Exploit public-facing application: common SQL injection patterns in the request URI
+alert http any any -> $HOME_NET any (msg:"NETWATCH SQL injection in HTTP request"; flow:established,to_server; http.uri; pcre:"/(%27|')\s*(or|and)\s+\d+\s*=\s*\d+|union(\s|\+|%20)+select|sleep\(\d+\)/i"; classtype:web-application-attack; priority:1; sid:1000003; rev:1; metadata:mitre_technique_id T1190;)
+
+# T1071.004 DNS tunneling: repeated queries with very long names
+alert dns any any -> any any (msg:"NETWATCH Suspicious DNS query length"; flow:to_server; dns.query; bsize:>60; threshold:type both, track by_src, count 5, seconds 60; classtype:bad-unknown; priority:2; sid:1000004; rev:1; metadata:mitre_technique_id T1071;)
+
+# T1498 Network denial of service: more than 100 SYNs per second from one source
+alert tcp any any -> $HOME_NET any (msg:"NETWATCH SYN flood"; flags:S,12; threshold:type both, track by_src, count 100, seconds 1; classtype:attempted-dos; priority:1; sid:1000005; rev:1; metadata:mitre_technique_id T1498;)

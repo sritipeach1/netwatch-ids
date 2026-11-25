@@ -1,0 +1,18 @@
+# Render blueprint for the hosted demo API (free plan sleeps when idle; the first request after a nap takes a while).
+services:
+  - type: web
+    name: netwatch-api
+    runtime: docker
+    dockerfilePath: ./api/Dockerfile
+    dockerContext: ./api
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: NETWATCH_MODE
+        value: demo
+      - key: NETWATCH_BACKFILL_HOURS
+        value: "24"
+      - key: NETWATCH_CORS
+        value: https://YOUR-APP.vercel.app   # set to your Vercel URL
+      - key: NETWATCH_DB
+        value: ":memory:"
