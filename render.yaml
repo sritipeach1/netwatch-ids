@@ -13,6 +13,6 @@ services:
       - key: NETWATCH_BACKFILL_HOURS
         value: "24"
       - key: NETWATCH_CORS
-        value: https://YOUR-APP.vercel.app   # set to your Vercel URL
+        value: https://netwatch-ids.vercel.app 
       - key: NETWATCH_DB
         value: ":memory:"
