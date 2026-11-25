@@ -1,5 +1,7 @@
 # NetWatch
 
+
+live demo: https://netwatch-ids.vercel.app/
 A network intrusion detection system with automatic response and a live dashboard.
 Suricata rules catch known attack patterns, a flow classifier catches behaviour the rules miss, and a response engine blocks offenders through nftables. A Next.js dashboard shows it all as it happens.
 
