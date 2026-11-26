@@ -58,3 +58,13 @@ def test_live_mode_requires_api_key_and_has_no_simulation(monkeypatch):
         assert c.post("/api/blocks/203.0.113.9/unblock").status_code == 403
         assert c.post("/api/blocks/203.0.113.9/unblock", headers={"X-API-Key": "secret"}).status_code == 404
         assert c.post("/api/simulate", json={"attack": "scan"}).status_code == 404
+
+
+def test_real_eval_is_404_until_generated(client, tmp_path):
+    assert client.get("/api/model/real-eval").status_code == 404
+    import shutil
+    from tests.conftest import MODEL
+    shutil.copy(MODEL, tmp_path / "flow_clf.joblib")
+    (tmp_path / "cicids2017.json").write_text('{"dataset": "CIC-IDS2017"}')
+    with TestClient(create_app(make_settings(model_path=str(tmp_path / "flow_clf.joblib")))) as c:
+        assert c.get("/api/model/real-eval").json()["dataset"] == "CIC-IDS2017"

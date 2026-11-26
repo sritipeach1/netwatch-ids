@@ -68,3 +68,27 @@ export type Health = {
   model_loaded: boolean;
   uptime_s: number;
 };
+
+/** Results of `python -m app.train_cicids` (api/models/cicids2017.json). */
+export type DetectionScore = {
+  threshold: number;
+  recall: number;
+  precision: number;
+  false_alarm_rate: number;
+  false_alarms: number;
+  benign_windows: number;
+  attack_windows: number;
+};
+export type RealEval = {
+  trained_at: number;
+  dataset: string;
+  data: { flows: number; windows: number; by_class: Record<string, number>; excluded_other: number };
+  method: { window_s: number; min_flows: number; folds: number; grouping: string };
+  cross_validation: {
+    macro_f1: { mean: number; std: number };
+    per_class: Record<string, { precision: number; recall: number; f1: number; support: number }>;
+    detection: DetectionScore;
+    by_attack: { attack: string; class: string; windows: number; detected: number; correct_type: number }[];
+  };
+  simulator_model_on_real_data?: { detection: DetectionScore };
+};

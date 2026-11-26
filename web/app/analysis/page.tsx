@@ -7,6 +7,7 @@ import type { Compare } from "@/lib/types";
 import { TRUTH_LABELS, num, pct } from "@/lib/format";
 import { BarList } from "@/components/Charts";
 import { Radar } from "@/components/Radar";
+import { RealEvalPanel } from "@/components/RealEval";
 import { ErrorNote, PageHeader, Panel, Skeleton } from "@/components/ui";
 
 const RANGES = [6, 12, 24];
@@ -203,10 +204,12 @@ export default function Analysis() {
                     </tbody>
                   </table>
                 )}
-                <p className="mt-3 text-[13px] text-ink-3">These numbers describe the simulator, not real networks. Retrain on a labelled capture before trusting them elsewhere.</p>
+                <p className="mt-3 text-[13px] text-ink-3">These numbers describe the simulator, not real networks. Results on real captured traffic are below, when they have been generated.</p>
               </Panel>
             </div>
           )}
+
+          <RealEvalPanel />
         </>
       ) : null}
     </>

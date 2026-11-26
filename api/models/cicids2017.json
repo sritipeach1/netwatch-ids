@@ -1,0 +1,257 @@
+{
+  "trained_at": 1795720735,
+  "dataset": "CIC-IDS2017",
+  "files": [
+    {
+      "name": "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+      "flows": 225745,
+      "minute_timestamps": true
+    },
+    {
+      "name": "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+      "flows": 286467,
+      "minute_timestamps": true
+    },
+    {
+      "name": "Friday-WorkingHours-Morning.pcap_ISCX.csv",
+      "flows": 191033,
+      "minute_timestamps": true
+    },
+    {
+      "name": "Monday-WorkingHours.pcap_ISCX.csv",
+      "flows": 529918,
+      "minute_timestamps": false
+    },
+    {
+      "name": "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+      "flows": 288602,
+      "minute_timestamps": true
+    },
+    {
+      "name": "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
+      "flows": 170366,
+      "minute_timestamps": true
+    },
+    {
+      "name": "Tuesday-WorkingHours.pcap_ISCX.csv",
+      "flows": 445909,
+      "minute_timestamps": true
+    },
+    {
+      "name": "Wednesday-workingHours.pcap_ISCX.csv",
+      "flows": 692703,
+      "minute_timestamps": true
+    }
+  ],
+  "data": {
+    "flows": 2830743,
+    "windows": 56301,
+    "by_class": {
+      "benign": 56059,
+      "bruteforce": 125,
+      "flood": 96,
+      "scan": 21
+    },
+    "excluded_other": 608
+  },
+  "method": {
+    "window_s": 60,
+    "min_flows": 3,
+    "folds": 5,
+    "grouping": "10-minute time blocks",
+    "max_benign": null,
+    "model": "Random forest, 100 trees, depth 14, balanced class weights"
+  },
+  "cross_validation": {
+    "macro_f1": {
+      "mean": 0.8152,
+      "std": 0.1009
+    },
+    "per_class": {
+      "benign": {
+        "precision": 0.9988,
+        "recall": 1.0,
+        "f1": 0.9994,
+        "support": 56059
+      },
+      "bruteforce": {
+        "precision": 1.0,
+        "recall": 0.904,
+        "f1": 0.9496,
+        "support": 125
+      },
+      "flood": {
+        "precision": 1.0,
+        "recall": 0.5625,
+        "f1": 0.72,
+        "support": 96
+      },
+      "scan": {
+        "precision": 1.0,
+        "recall": 0.2381,
+        "f1": 0.3846,
+        "support": 21
+      }
+    },
+    "detection": {
+      "threshold": 0.8,
+      "recall": 0.7107,
+      "precision": 1.0,
+      "false_alarm_rate": 0.0,
+      "false_alarms": 0,
+      "benign_windows": 56059,
+      "attack_windows": 242
+    },
+    "detection_at_0_5": {
+      "threshold": 0.5,
+      "recall": 0.8099,
+      "precision": 0.9949,
+      "false_alarm_rate": 2e-05,
+      "false_alarms": 1,
+      "benign_windows": 56059,
+      "attack_windows": 242
+    },
+    "confusion": {
+      "labels": [
+        "benign",
+        "bruteforce",
+        "flood",
+        "scan"
+      ],
+      "matrix": [
+        [
+          56059,
+          0,
+          0,
+          0
+        ],
+        [
+          12,
+          113,
+          0,
+          0
+        ],
+        [
+          42,
+          0,
+          54,
+          0
+        ],
+        [
+          16,
+          0,
+          0,
+          5
+        ]
+      ]
+    },
+    "by_attack": [
+      {
+        "attack": "SSH-Patator",
+        "class": "bruteforce",
+        "windows": 63,
+        "detected": 0.8889,
+        "correct_type": 0.8889
+      },
+      {
+        "attack": "FTP-Patator",
+        "class": "bruteforce",
+        "windows": 62,
+        "detected": 0.9194,
+        "correct_type": 0.9194
+      },
+      {
+        "attack": "DoS slowloris",
+        "class": "flood",
+        "windows": 26,
+        "detected": 0.4231,
+        "correct_type": 0.4231
+      },
+      {
+        "attack": "DDoS",
+        "class": "flood",
+        "windows": 22,
+        "detected": 0.8636,
+        "correct_type": 0.8636
+      },
+      {
+        "attack": "DoS Hulk",
+        "class": "flood",
+        "windows": 21,
+        "detected": 0.7619,
+        "correct_type": 0.7619
+      },
+      {
+        "attack": "PortScan",
+        "class": "scan",
+        "windows": 21,
+        "detected": 0.2381,
+        "correct_type": 0.2381
+      },
+      {
+        "attack": "DoS Slowhttptest",
+        "class": "flood",
+        "windows": 19,
+        "detected": 0.2632,
+        "correct_type": 0.2632
+      },
+      {
+        "attack": "DoS GoldenEye",
+        "class": "flood",
+        "windows": 8,
+        "detected": 0.375,
+        "correct_type": 0.375
+      }
+    ]
+  },
+  "simulator_model_on_real_data": {
+    "detection": {
+      "threshold": 0.8,
+      "recall": 0.0165,
+      "precision": 0.0048,
+      "false_alarm_rate": 0.01481,
+      "false_alarms": 830,
+      "benign_windows": 56059,
+      "attack_windows": 242
+    },
+    "per_class": {
+      "benign": {
+        "precision": 0.9957,
+        "recall": 0.9852,
+        "f1": 0.9904,
+        "support": 56059
+      },
+      "bruteforce": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 125
+      },
+      "flood": {
+        "precision": 0.4286,
+        "recall": 0.0312,
+        "f1": 0.0583,
+        "support": 96
+      },
+      "scan": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 21
+      }
+    }
+  },
+  "feature_importance": {
+    "log_flows": 0.1642,
+    "log_mean_duration": 0.1293,
+    "top_port_share": 0.1269,
+    "unique_port_ratio": 0.11,
+    "ssh_share": 0.103,
+    "log_flows_per_s": 0.0858,
+    "log_mean_bytes_out": 0.0721,
+    "log_unique_ports": 0.0661,
+    "log_mean_pkts_out": 0.0566,
+    "no_reply_ratio": 0.046,
+    "log_mean_bytes_in": 0.04
+  }
+}

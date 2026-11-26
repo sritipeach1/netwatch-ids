@@ -6,3 +6,8 @@ __pycache__/
 node_modules/
 .next/
 .env
+# large trained model from CIC-IDS2017 (the results JSON is committed)
+api/models/cicids2017.joblib
+# the dataset itself
+data/
+*.pcap_ISCX.csv

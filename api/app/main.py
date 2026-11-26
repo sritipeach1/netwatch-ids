@@ -111,6 +111,15 @@ def create_app(settings: Optional[Settings] = None) -> FastAPI:
         out["model"] = model.meta if model else None
         return out
 
+    @app.get("/api/model/real-eval")
+    def real_eval():
+        """Results of python -m app.train_cicids, if they have been generated and committed."""
+        path = os.path.join(os.path.dirname(cfg.model_path) or ".", "cicids2017.json")
+        if not os.path.exists(path):
+            raise HTTPException(status_code=404, detail="No real-data evaluation yet")
+        with open(path) as fh:
+            return json.load(fh)
+
     @app.post("/api/simulate")
     async def simulate(req: SimulateRequest):
         if cfg.mode != "demo":
